@@ -105,8 +105,10 @@ void SequenceList<T>::ListInsert(int index, T e)
         //容量不足
         T *newbase = new T[listsize + LISTINCREMENT];
         if (!newbase) throw "Storage allocation failure";
-        memcpy_s(newbase, sizeof(newbase), elem, sizeof(elem));
         listsize += LISTINCREMENT;
+        memcpy_s(newbase, listsize * sizeof(T), elem, length * sizeof(T));
+        delete[] elem;
+        elem = newbase;     //新的基址
     }
     for (int i = length - 1; i >= index - 1; i--)   //应从尾元素开始向后迁移, 否则会覆盖
         elem[i + 1] = elem[i];
