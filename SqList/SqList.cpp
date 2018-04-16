@@ -35,7 +35,19 @@ void SqList<T>::resize(int size) {
 }
 
 template<typename T>
-void SqList<T>::listInsert(int i, T e) {
+int SqList<T>::findList(T e) {
+    //在线性表中查找元素e并返回其索引
+    //如果查找元素不存在则返回-1
+    for(int i = 0 ; i < length; i++) {
+        if(elem[i] == e) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+template<typename T>
+void SqList<T>::insertList(int i, T e) {
     //在顺序表中第i个位置之前插入元素e
     if (i < 1 || i > length + 1) {
         //索引不合法
@@ -60,7 +72,26 @@ void SqList<T>::listInsert(int i, T e) {
 }
 
 template<typename T>
-T SqList<T>::listDelete(int i) {
+void SqList<T>::deleteList1(T e) {
+    //删除顺序表中指定值e并返回
+    //如果指定元素不存在则不操作
+    int pos = this->findList(e);
+    if(pos == -1) {
+        //元素不存在，返回
+        return;
+    }
+    for(int i = pos; i < length; i++) {
+        elem[i] = elem[i + 1];
+    }
+    length--;
+    if(length <= listsize / 4) {
+        //分配的空间过多，归还部分空间
+        resize(listsize / 2);
+    }
+}
+
+template<typename T>
+T SqList<T>::deleteList2(int i) {
     //在顺序表中删除第i个元素并返回其值
     if(i < 1 || i > length) {
         //索引不合法
@@ -82,6 +113,10 @@ T SqList<T>::listDelete(int i) {
      *     elem[i] = elem[i + 1];
      * */
     --length;
+    if(length <= listsize / 4) {
+        //分配的空间过多，归还部分空间
+        resize(listsize / 2);
+    }
     return val;
 }
 
@@ -92,4 +127,39 @@ void SqList<T>::display() {
     }
     std::cout << std::endl;
 }
+
+template<typename T>
+void SqList<T>::unionList(SqList<T> b) {
+    int la_len = this->length + 1;    //在末尾插入即在length+1前插入元素
+    for(int i = 1; i <= b.length; i++) {
+        //如果在当前表中没找到元素则插入, 否则跳过
+        //elem元素的数组下标比位序少1
+        if(this->findList(b.elem[i - 1]) == -1) {
+            this->insertList(la_len++, b.elem[i - 1]);
+        }
+    }
+}
+
+template<typename T>
+void SqList<T>::deleteBetween(int x, int y) {
+    //删除顺序表中值大于等于x且小于y的元素 [x,y)
+    //这个操作只适用于泛型T指示为整形变量的实例
+    if(x <= y) {
+        //区间不合法
+        throw "Interval is not valid";
+    }
+    int count = 0;    //记录有效元素个数
+    for(int i = 0; i < length; i++) {
+        if(elem[i] >= x && elem[i] < y) {
+            continue;
+        } else {
+            elem[count++] = elem[i];
+        }
+    }
+    length = count;
+}
+
+
+
+
 

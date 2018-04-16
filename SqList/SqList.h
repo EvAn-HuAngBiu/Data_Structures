@@ -11,9 +11,9 @@
 #ifndef SQLIST_H
 #define SQLIST_H
 
-#include "../Header/Status.h"
-const unsigned LIST_INIT_SIZE = 100;
-const unsigned LIST_INCREMENT = 10;
+//#include "../Header/Status.h"
+const int LIST_INIT_SIZE = 100;
+const int LIST_INCREMENT = 10;
 
 template<typename T>
 class SqList {
@@ -25,11 +25,15 @@ public:
     SqList();
     ~SqList();
     void resize(int size);
-    void listInsert(int i, T e);
-    T listDelete(int i);
+    void insertList(int i, T e);
+    int findList(T e);
+    void deleteList1(T e);
+    T deleteList2(int i);
     int size() { return length; }
     bool isEmpty() { return length == 0; }
     void display();
+    void unionList(SqList<T> s);
+    void deleteBetween(int x, int y);
 };
 
 #endif //SQLIST_H
